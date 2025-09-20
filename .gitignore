@@ -1,0 +1,20 @@
+Arquivos de dados processados (gerados localmente)
+data/processed/dados_consolidados.json
+
+Arquivos de dados brutos grandes
+data/raw/applicants.json
+data/raw/vagas.json
+
+Cache e ambientes virtuais do Python
+**/pycache/
+*.pyc
+venv/
+.venv/
+
+Metadados do sistema operacional
+.DS_Store
+
+Logs do CatBoost
+catboost_info/
+
+__pycache__
