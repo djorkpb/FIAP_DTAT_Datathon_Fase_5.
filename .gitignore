@@ -1,20 +1,40 @@
-Arquivos de dados processados (gerados localmente)
-data/processed/dados_consolidados.json
-
-Arquivos de dados brutos grandes
-data/raw/applicants.json
-data/raw/vagas.json
-
-Cache e ambientes virtuais do Python
-**/pycache/
-*.pyc
+Ambientes Virtuais e Caches do Python
+------------------------------------
 venv/
 .venv/
+pycache/
+*.pyc
+*.pyo
+*.pyd
 
-Metadados do sistema operacional
-.DS_Store
+Ficheiros de Dados Brutos e Processados (os mesmos se encontram no Releases)
+--------------------------------------------------------------------
+data/raw/
+data/processed/
 
-Logs do CatBoost
+Artefatos de Performance Gerados
+(Estes ficheiros são gerados pelo build_artifacts.py e não devem ser versionados)
+-------------------------------------------------------------------------
+artifacts/
+
+Modelos Treinados
+(Modelos podem ser grandes e são considerados artefactos, não código-fonte)
+---------------------------------------------------------------------
+models/
+
+Ficheiros de Jupyter Notebook
+-----------------------------
+.ipynb_checkpoints/
+
+Configuração do Streamlit
+-------------------------
+.streamlit/
+
+Logs de Ferramentas
+-------------------
 catboost_info/
 
-__pycache__
+Metadados do Sistema Operacional
+--------------------------------
+.DS_Store
+Thumbs.db
