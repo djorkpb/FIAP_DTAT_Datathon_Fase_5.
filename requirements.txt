@@ -1,17 +1,24 @@
-# Análise e Processamento de Dados
-pandas==2.2.2
-scikit-learn==1.5.0
-joblib==1.4.2
+# Framework da Aplicação Web
+streamlit==1.49.1
 
-# Modelos de Machine Learning
-xgboost==2.0.3
-lightgbm==4.3.0
-catboost==1.2.5
+# Análise e Manipulação de Dados
+pandas==2.3.2
+numpy==1.26.4
+pyarrow==16.1.0
 
-# Aplicação Web e Visualização
-streamlit==1.38.0
+# Machine Learning e NLP
+scikit-learn==1.7.2
+joblib==1.5.2
+xgboost==3.0.5
+lightgbm==4.6.0
+catboost==1.2.8
+
+# Visualização de Dados
+matplotlib==3.10.6
 seaborn==0.13.2
-matplotlib==3.9.0
+
+# Requisições HTTP
+requests==2.32.5
 
 # Testes
-pytest==8.2.2
+pytest==8.4.2
