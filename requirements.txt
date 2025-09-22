@@ -4,7 +4,7 @@ streamlit==1.49.1
 # Análise e Manipulação de Dados
 pandas==2.3.2
 numpy==1.26.4
-pyarrow==16.1.0
+pyarrow==15.0.0
 
 # Machine Learning e NLP
 scikit-learn==1.7.2
@@ -21,4 +21,5 @@ seaborn==0.13.2
 requests==2.32.5
 
 # Testes
+
 pytest==8.4.2
