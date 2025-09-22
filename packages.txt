@@ -1,8 +1,6 @@
-pandas
-streamlit
-pyarrow==15.0.0
 build-essential
 cmake
 libarrow-dev
 libarrow-python-dev
+
 
