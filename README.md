@@ -85,7 +85,7 @@ streamlit run app/app.py
 
 **Nota 1:** A aplicação já está configurada para buscar os arquivos das URLs definidas no topo do src/app\_utils.py. Certifique-se de que essas URLs estejam corretas e acessíveis.
 
-**Nota 2:** Para fazer o deploy no Streamlit.io é necessário definir a versão do Python 3.12 (Advanced settings).
+**Nota 2:** Para fazer o deploy no Streamlit.io é necessário definir a versão do **Python 3.12** (Advanced settings).
 
 ## **⚙️ Como Reproduzir o Pipeline Completo (Do Zero)**
 
