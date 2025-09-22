@@ -1,6 +1,0 @@
-build-essential
-cmake
-libarrow-dev
-libarrow-python-dev
-
-
