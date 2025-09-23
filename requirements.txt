@@ -1,12 +1,12 @@
-Framework da Aplicação Web
+# Framework da Aplicação Web
 streamlit==1.49.1
 
-Análise e Manipulação de Dados
+# Análise e Manipulação de Dados
 pandas==2.3.2
 numpy==1.26.4
 pyarrow==16.1.0
 
-Machine Learning, NLP e Reamostragem
+# Machine Learning, NLP e Reamostragem
 scikit-learn==1.7.2
 imbalanced-learn==0.12.3
 joblib==1.5.2
@@ -14,12 +14,12 @@ xgboost==3.0.5
 lightgbm==4.6.0
 catboost==1.2.8
 
-Visualização de Dados
+# Visualização de Dados
 matplotlib==3.10.6
 seaborn==0.13.2
 
-Requisições HTTP
+# Requisições HTTP
 requests==2.32.5
 
-Testes
+# Testes
 pytest==8.4.2
