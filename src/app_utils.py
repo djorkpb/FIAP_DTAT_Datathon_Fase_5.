@@ -11,7 +11,7 @@ import ast
 
 # --- FONTES DE DADOS NA NUVEM (PADRONIZADO) ---
 VAGAS_URL = "https://github.com/djorkpb/FIAP_DTAT_Datathon_Fase_5./releases/download/datathon_fase_5/vagas_cleaned.json"
-MODEL_URL = "https://github.com/djorkpb/FIAP_DTAT_Datathon_Fase_5./releases/download/datathon_fase_5/modelo_decision_match_ai.joblib"
+MODEL_URL = "https://github.com/djorkpb/FIAP_DTAT_Datathon_Fase_5./blob/main/models/modelo_decision_match_ai.joblib"
 
 # !!! SUBSTITUA PELAS SUAS URLS DOS ARTEFATOS GERADOS PELO build_artifacts.py !!!
 APPLICANTS_PROCESSED_URL = "https://github.com/djorkpb/FIAP_DTAT_Datathon_Fase_5./releases/download/datathon_fase_5/applicants_processed.parquet"
