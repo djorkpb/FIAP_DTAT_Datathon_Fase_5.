@@ -30,17 +30,15 @@ def train_model():
         return
 
     print("\nPreparando os dados para o modelo...")
-    # --- ATUALIZAÇÃO: Adicionada a nova feature de espanhol ---
     features = [
         'similaridade_texto', 
         'match_nivel_ingles', 
-        'match_nivel_espanhol', # NOVA FEATURE
+        'match_nivel_espanhol',
         'match_sap',
         'match_anos_experiencia', 
         'skills_match_score', 
         'match_nivel_profissional'
     ]
-    # --- FIM DA ATUALIZAÇÃO ---
     X = df[features]
     y = df['match']
 
@@ -66,7 +64,7 @@ def train_model():
     scale_pos_weight = y_train.value_counts()[0] / y_train.value_counts()[1]
 
     # Modelo 2: Otimização do XGBoost
-    print("\n2. Otimizando XGBoost...")
+    print("\n2. Treinando e otimizando XGBoost...")
     param_grid_xgb = {
         'n_estimators': [100, 200, 300], 'max_depth': [3, 5, 7],
         'learning_rate': [0.01, 0.05, 0.1], 'subsample': [0.7, 0.8],
@@ -80,7 +78,7 @@ def train_model():
     xgb_clf_tuned = xgb_search.best_estimator_
 
     # Modelo 3: Otimização do LightGBM
-    print("\n3. Otimizando LightGBM...")
+    print("\n3. Treinando e otimizando LightGBM...")
     param_grid_lgb = {
         'n_estimators': [100, 200, 300], 'max_depth': [-1, 3, 5, 7],
         'learning_rate': [0.01, 0.05, 0.1], 'num_leaves': [20, 31, 40],
@@ -94,9 +92,9 @@ def train_model():
     lgb_clf_tuned = lgb_search.best_estimator_
 
     # Modelo 4: Otimização do CatBoost
-    print("\n4. Otimizando CatBoost...")
+    print("\n4. Treinando e otimizando CatBoost...")
     param_grid_cat = {
-        'iterations': [100, 200, 300], 'depth': [4, 6, 8],
+        'iterations': [100, 200, 300], 'depth': [3, 5, 7],
         'learning_rate': [0.01, 0.05, 0.1], 'l2_leaf_reg': [1, 3, 5],
         'subsample': [0.7, 0.8]
     }
