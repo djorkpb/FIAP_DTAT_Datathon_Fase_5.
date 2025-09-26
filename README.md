@@ -4,17 +4,45 @@
 
 Este projeto foi desenvolvido como solução para o **Datathon Decision**, um desafio focado em aplicar Inteligência Artificial para otimizar os processos de recrutamento e seleção da empresa Decision, uma especialista em bodyshop de TI.
 
-A solução proposta é o **Decision Match AI**, um sistema de recomendação inteligente para otimização do recrutamento com Inteligência Artificial. A ferramenta utiliza um modelo de Machine Learning para analisar o perfil de um candidato em relação a uma vaga e gerar um **"score de compatibilidade"**. O objetivo é ranquear os candidatos, permitindo que o time de recrutadores foque seu tempo e energia nos perfis mais promissores.
+A solução proposta é o **Decision Match AI**, um sistema de recomendação inteligente. A ferramenta utiliza um modelo de Machine Learning para analisar o perfil de um candidato em relação a uma vaga e gerar um **"score de compatibilidade"**.
 
-Para garantir alta performance e portabilidade, a aplicação foi arquitetada para carregar um modelo treinado e artefatos de dados pré-processados diretamente da nuvem, garantindo um carregamento rápido e uma experiência de utilizador fluida.
+O objetivo principal da ferramenta **não é encontrar todos os bons candidatos**, mas sim realizar uma **triagem de altíssima relevância**. A meta é eliminar eficientemente os perfis com baixa compatibilidade ("maus candidatos"), garantindo que os poucos candidatos que o recrutador analisa tenham uma probabilidade muito maior de serem adequados para a vaga, otimizando assim o tempo e a eficiência do processo seletivo.
 
-O pipeline de Machine Learning foi construído seguindo as melhores práticas de MLOps, incluindo etapas de processamento de dados, engenharia de features, competição entre múltiplos modelos (Regressão Logística, XGBoost, LightGBM e CatBoost), avaliação de métricas e testes unitários.
+O pipeline de Machine Learning foi construído seguindo as melhores práticas de MLOps, incluindo etapas de processamento de dados, engenharia de features, competição entre múltiplos modelos, avaliação de métricas e testes unitários.
+
+## **🎯 Seleção de Modelo e Performance**
+
+A escolha do modelo foi realizada através de um processo competitivo, onde algoritmos como Regressão Logística, XGBoost, LightGBM e CatBoost foram treinados e avaliados.
+
+### **Métrica de Avaliação: Foco na Precisão**
+
+Dado o objetivo de negócio de "não fazer o recrutador perder tempo", a métrica principal para o sucesso é a **Precisão (Precision)**. Para a classe "Não Match", uma alta precisão garante que estamos a eliminar os candidatos errados de forma eficaz. Para a classe "Match", uma alta precisão garante que as recomendações feitas são confiáveis e de alta qualidade.
+
+### **Resultados Finais e Interpretação**
+
+Após o treino com dados balanceados (SMOTE) e o ajuste do limiar de decisão, o modelo final (CatBoost Otimizado) alcançou as seguintes métricas de performance no conjunto de teste:
+
+\--- MÉTRICAS DE PERFORMANCE (LIMIAR OTIMIZADO) \---  
+              precision    recall  f1-score   support
+
+           0       0.95      0.95      0.95      2615  
+           1       0.22      0.23      0.22       155
+
+    accuracy                           0.91      2770
+
+**Análise Positiva dos Resultados:**
+
+* **Excelente Triagem (Precisão da Classe 0 \= 95%):** O resultado mais forte do modelo é a sua capacidade de identificar corretamente os "não-matches". Quando o modelo diz que um candidato não é adequado, ele está correto em 95% das vezes. Isto cumpre perfeitamente o objetivo principal de **eliminar os maus candidatos** com altíssima confiança, limpando a base para o recrutador.  
+* **Recomendações de Alta Relevância (Precisão da Classe 1 \= 22%):** O modelo alcançou uma precisão de 22% para as suas recomendações positivas. Isto significa que, de cada 5 candidatos que a ferramenta recomenda, 1 é, de facto, um "match", representando uma melhoria significativa na qualidade da triagem e na otimização do tempo do recrutador em comparação a uma análise manual.  
+* **Trade-off Intencional (Recall da Classe 1 \= 23%):** O baixo recall é uma consequência direta e **intencional** da nossa estratégia. Para garantir que as recomendações sejam de alta qualidade (alta precisão), o modelo torna-se mais seletivo e rigoroso, deixando de capturar alguns candidatos que poderiam ser adequados. Este é um trade-off positivo para o cenário de negócio definido, que prioriza a qualidade sobre a quantidade das recomendações.
+
+Em resumo, o modelo final é um sucesso, pois está perfeitamente alinhado com a estratégia de negócio de fornecer uma ferramenta de triagem precisa e que otimiza o tempo da equipa de recrutamento.
 
 ## **🛠️ Stack Utilizada**
 
 * **Linguagem:** Python 3  
 * **Análise e Processamento de Dados:** Pandas, NumPy, Parquet (pyarrow)  
-* **Machine Learning:** Scikit-learn, XGBoost, LightGBM, CatBoost  
+* **Machine Learning:** Scikit-learn, XGBoost, LightGBM, CatBoost, Imbalanced-learn  
 * **Web App (Dashboard):** Streamlit  
 * **Serialização de Artefatos:** Joblib  
 * **Testes:** Pytest
@@ -57,7 +85,7 @@ Esta é a forma mais rápida de executar a aplicação, pois ela carrega todos o
 
 **1\. Pré-requisitos:**
 
-* Ter o [Python 3.8+](https://www.python.org/downloads/) instalado.  
+* Ter o [Python 3.11](https://www.python.org/downloads/) instalado.  
 * Ter o pip (gestor de pacotes do Python) instalado.
 
 **2\. Clone o Repositório:**
@@ -83,10 +111,7 @@ pip install \-r requirements.txt
 
 streamlit run app/app.py
 
-
-**Nota 1:** A aplicação já está configurada para buscar os arquivos das URLs definidas no topo do src/app\_utils.py. Certifique-se de que essas URLs estejam corretas e acessíveis.
-
-**Nota 2:** Para fazer o deploy no Streamlit.io é necessário definir a versão do **Python 3.12** (Advanced settings).
+**Nota:** A aplicação já está configurada para buscar os arquivos das URLs definidas no topo do src/app\_utils.py. Certifique-se de que essas URLs estejam corretas e acessíveis.
 
 ## **⚙️ Como Reproduzir o Pipeline Completo (Do Zero)**
 
@@ -106,8 +131,7 @@ Siga estes passos se você deseja processar os dados brutos, treinar um novo mod
 1. **Treinar o modelo:**  
    python src/train.py
 
-   Isto irá gerar o arquivo models/modelo\_decision\_match\_ai.joblib.
-
+   Isto irá gerar o arquivo models/modelo\_decision\_match\_ai.joblib.  
 2. **Avaliar o modelo vencedor:**  
    python src/evaluate.py
 
