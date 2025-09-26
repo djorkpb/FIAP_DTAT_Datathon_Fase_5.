@@ -153,7 +153,7 @@ def main():
                 st.warning("Nenhum candidato compatível encontrado.")
             else:
                 for index, candidate_row in top_10_candidates.reset_index(drop=True).iterrows():
-                    expander_title = f"**{index + 1}. {candidate_row['Nome']} ({candidate_row['ID']})** (Score: {candidate_row['Score']:.2%})"
+                    expander_title = f"**{index + 1}. {candidate_row['Nome']} ({candidate_row['ID']})** (Compatibilidade com a Vaga: {candidate_row['Score']:.2%})"
                     with st.expander(expander_title):
                         candidato_selecionado = applicants_df[applicants_df['id_candidato'] == candidate_row['ID']].iloc[0]
                         
@@ -287,4 +287,5 @@ def main():
             st.info("👋 Bem-vindo! Utilize o painel à esquerda para filtrar as vagas.")
 
 if __name__ == "__main__":
+
     main()
