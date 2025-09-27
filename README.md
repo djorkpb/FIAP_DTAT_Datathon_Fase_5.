@@ -77,6 +77,7 @@ Em resumo, o modelo final é um sucesso, pois está perfeitamente alinhado com a
 ├── .gitignore                    \# Arquivo para ignorar pastas e arquivos  
 ├── build\_artifacts.py          \# Script para gerar os artefatos de performance  
 ├── README.md                     \# Documentação do projeto  
+├── PIPELINE.md                   \# Pipeline do projeto  
 └── requirements.txt              \# Bibliotecas e versões para o ambiente
 
 ## **🚀 Como Rodar a Aplicação (Modo Simples)**
