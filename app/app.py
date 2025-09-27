@@ -17,6 +17,19 @@ from src.app_utils import (
     get_vaga_text
 )
 
+def are_filters_active(filter_keys):
+    """Verifica se algum filtro foi ativado pelo utilizador."""
+    for key in filter_keys:
+        if key in st.session_state:
+            value = st.session_state[key]
+            if key.startswith('ms_') and value:  # Verifica se a lista de multiselect não está vazia
+                return True
+            # --- CORREÇÃO APLICADA AQUI ---
+            # Qualquer seleção num selectbox (que não seja None) agora aciona a pesquisa.
+            if key.startswith('sel_') and value is not None:
+                return True
+    return False
+
 def main():
     """Função principal que executa a aplicação Streamlit."""
     
@@ -44,16 +57,17 @@ def main():
     if 'filters_initialized' not in st.session_state:
         st.session_state.filters_initialized = True
         for key in filter_keys:
-            if key.startswith('ms_'): st.session_state[key] = []
-            elif key == 'sel_sap': st.session_state[key] = "Indiferente"
-            else: st.session_state[key] = None
+            if key.startswith('ms_'):
+                st.session_state[key] = []
+            else:
+                st.session_state[key] = None
 
     if 'selected_vaga' not in st.session_state:
         st.session_state.selected_vaga = None
     if 'current_page' not in st.session_state:
         st.session_state.current_page = 1
 
-    with st.spinner("Carregando dados e modelos. Isso pode levar um tempo..."):
+    with st.spinner("Carregando dados e modelos..."):
         model, vagas_df = load_base_data()
         applicants_df, vectorizer, candidato_tfidf_matrix = get_precomputed_data()
 
@@ -68,9 +82,10 @@ def main():
 
             def clear_filters_callback():
                 for key in filter_keys:
-                    if key.startswith('ms_'): st.session_state[key] = []
-                    elif key == 'sel_sap': st.session_state[key] = "Indiferente"
-                    else: st.session_state[key] = None
+                    if key.startswith('ms_'):
+                        st.session_state[key] = []
+                    else:
+                        st.session_state[key] = None
                 st.session_state.selected_vaga = None
                 st.session_state.current_page = 1
             
@@ -106,7 +121,7 @@ def main():
                     for skill in st.session_state.ms_skills:
                         df_selection = df_selection[df_selection['vaga_text'].str.contains(skill, regex=False)]
                 
-                st.selectbox("Vaga SAP:", options=["Indiferente", "Sim", "Não"], key='sel_sap', on_change=on_filter_change)
+                st.selectbox("Vaga SAP:", options=["Indiferente", "Sim", "Não"], key='sel_sap', placeholder="Selecione...", on_change=on_filter_change, index=None)
                 if st.session_state.get('sel_sap') and st.session_state.get('sel_sap') != "Indiferente":
                     df_selection = df_selection[df_selection['info.vaga_sap'] == st.session_state.sel_sap]
                 
@@ -128,7 +143,9 @@ def main():
             
             st.button("Limpar Filtros", use_container_width=True, on_click=clear_filters_callback)
             st.session_state.filtered_vagas = df_selection
-            st.info(f"**{len(df_selection)} vagas encontradas.**")
+            
+            if are_filters_active(filter_keys):
+                st.info(f"**{len(df_selection)} vagas encontradas.**")
 
         if st.session_state.selected_vaga is not None:
             vaga_selecionada = st.session_state.selected_vaga
@@ -157,7 +174,6 @@ def main():
                     with st.expander(expander_title):
                         candidato_selecionado = applicants_df[applicants_df['id_candidato'] == candidate_row['ID']].iloc[0]
                         
-                        # --- BLOCO COM A SINTAXE CORRETA ---
                         explanation_strings = get_explanation_strings(
                             vaga_selecionada, 
                             candidato_selecionado,
@@ -230,7 +246,7 @@ def main():
                             cv_text = candidato_selecionado.get('cv_pt', 'Currículo não disponível.')
                             st.text_area("CV", value=cv_text, height=300, label_visibility="collapsed", key=f"cv_text_area_{candidate_row['ID']}")
 
-        elif 'filtered_vagas' in st.session_state and st.session_state.filtered_vagas is not None:
+        elif are_filters_active(filter_keys):
             st.subheader("Vagas Encontradas")
             vagas_filtradas = st.session_state.filtered_vagas
 
@@ -252,19 +268,19 @@ def main():
 
                 for _, vaga in vagas_para_exibir.iterrows():
                     with st.container():
-                        col1, col2 = st.columns([4, 1])
-                        with col1:
-                            st.markdown(f"**{vaga['info.titulo_vaga']}**")
-                            st.markdown(f"<small>Empresa: {vaga.get('info.cliente', 'N/A')} | Área: {vaga.get('perfil.areas_atuacao', 'N/A')}</small>", unsafe_allow_html=True)
-                        with col2:
-                            if st.button("Analisar Candidatos", key=vaga['id_vaga'], use_container_width=True):
-                                st.session_state.selected_vaga = vaga
-                                st.rerun()
+                        st.markdown(f"**{vaga['info.titulo_vaga']}**")
+                        st.markdown(f"<small>Empresa: {vaga.get('info.cliente', 'N/A')} | Área: {vaga.get('perfil.areas_atuacao', 'N/A')}</small>", unsafe_allow_html=True)
                         
                         vaga_description = vaga.get('perfil.principais_atividades', '')
                         if vaga_description:
                             with st.expander("Ver Descrição da Vaga"):
                                 st.markdown(vaga_description)
+                        
+                        btn_col, _ = st.columns([1, 3])
+                        with btn_col:
+                            if st.button("Analisar Candidatos", key=vaga['id_vaga'], use_container_width=True):
+                                st.session_state.selected_vaga = vaga
+                                st.rerun()
                                 
                     st.markdown("---")
                 
@@ -287,5 +303,5 @@ def main():
             st.info("👋 Bem-vindo! Utilize o painel à esquerda para filtrar as vagas.")
 
 if __name__ == "__main__":
-
     main()
+
