@@ -22,9 +22,8 @@ def are_filters_active(filter_keys):
     for key in filter_keys:
         if key in st.session_state:
             value = st.session_state[key]
-            if key.startswith('ms_') and value:  # Verifica se a lista de multiselect não está vazia
+            if key.startswith('ms_') and value:
                 return True
-            # Qualquer seleção num selectbox (que não seja None) agora aciona a pesquisa.
             if key.startswith('sel_') and value is not None:
                 return True
     return False
@@ -303,5 +302,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
