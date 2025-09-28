@@ -12,7 +12,19 @@ O pipeline de Machine Learning foi construído seguindo as melhores práticas de
 
 ## **🎯 Seleção de Modelo e Performance**
 
-A escolha do modelo foi realizada através de um processo competitivo, onde algoritmos como Regressão Logística, XGBoost, LightGBM e CatBoost foram treinados e avaliados.
+A escolha do modelo foi realizada através de um processo competitivo, onde algoritmos como Regressão Logística, XGBoost, LightGBM e CatBoost foram treinados e avaliados. O script src/train.py aplica a técnica de reamostragem **SMOTE** para tratar o desbalanceamento de classes, garantindo um treinamento mais justo e robusto.
+
+### **Competição de Modelos**
+
+A seleção do melhor modelo foi baseada na métrica PR-AUC (Area Under the Precision-Recall Curve), que é ideal para problemas com classes desbalanceadas. O CatBoost demonstrou a melhor performance:
+
+\--- SELECIONANDO O MELHOR MODELO \---  
+  \- Regressão Logística | PR-AUC: 0.1115  
+  \- XGBoost Otimizado | PR-AUC: 0.1409  
+  \- LightGBM Otimizado | PR-AUC: 0.1324  
+  \- CatBoost Otimizado | PR-AUC: 0.1437
+
+🏆 Vencedor: CatBoost Otimizado com PR-AUC de 0.1437
 
 ### **Métrica de Avaliação: Foco na Precisão**
 
@@ -20,21 +32,21 @@ Dado o objetivo de negócio de "não fazer o recrutador perder tempo", a métric
 
 ### **Resultados Finais e Interpretação**
 
-Após o treino com dados balanceados (SMOTE) e o ajuste do limiar de decisão, o modelo final (CatBoost Otimizado) alcançou as seguintes métricas de performance no conjunto de teste:
+Após o treino com dados balanceados (SMOTE) e o ajuste do limiar de decisão pelo script src/evaluate.py, o modelo final **(CatBoost Otimizado)** alcançou as seguintes métricas de performance no conjunto de teste:
 
 \--- MÉTRICAS DE PERFORMANCE (LIMIAR OTIMIZADO) \---  
               precision    recall  f1-score   support
 
-           0       0.95      0.95      0.95      2615  
-           1       0.22      0.23      0.22       155
+           0       0.96      0.93      0.95      8568  
+           1       0.18      0.30      0.23       451
 
-    accuracy                           0.91      2770
+    accuracy                           0.90      9019
 
 **Análise Positiva dos Resultados:**
 
-* **Excelente Triagem (Precisão da Classe 0 \= 95%):** O resultado mais forte do modelo é a sua capacidade de identificar corretamente os "não-matches". Quando o modelo diz que um candidato não é adequado, ele está correto em 95% das vezes. Isto cumpre perfeitamente o objetivo principal de **eliminar os maus candidatos** com altíssima confiança, limpando a base para o recrutador.  
-* **Recomendações de Alta Relevância (Precisão da Classe 1 \= 22%):** O modelo alcançou uma precisão de 22% para as suas recomendações positivas. Isto significa que, de cada 5 candidatos que a ferramenta recomenda, 1 é, de facto, um "match", representando uma melhoria significativa na qualidade da triagem e na otimização do tempo do recrutador em comparação a uma análise manual.  
-* **Trade-off Intencional (Recall da Classe 1 \= 23%):** O baixo recall é uma consequência direta e **intencional** da nossa estratégia. Para garantir que as recomendações sejam de alta qualidade (alta precisão), o modelo torna-se mais seletivo e rigoroso, deixando de capturar alguns candidatos que poderiam ser adequados. Este é um trade-off positivo para o cenário de negócio definido, que prioriza a qualidade sobre a quantidade das recomendações.
+* **Excelente Triagem (Precisão da Classe 0 \= 96%):** O resultado mais forte do modelo é a sua capacidade de identificar corretamente os "não-matches". Quando o modelo diz que um candidato não é adequado, ele está correto em 96% das vezes. Isto cumpre perfeitamente o objetivo principal de **eliminar os maus candidatos** com altíssima confiança, limpando a base para o recrutador.  
+* **Recomendações Relevantes (Precisão da Classe 1 \= 18%):** O modelo alcançou uma precisão de 18% para as suas recomendações positivas. Isto significa que, de cada 6 candidatos que a ferramenta recomenda, 1 é, de facto, um "match", representando uma melhoria significativa na qualidade da triagem e na otimização do tempo do recrutador em comparação a uma análise manual.  
+* **Melhora na Captura de Talentos (Recall da Classe 1 \= 30%):** O recall para "matches" aumentou para 30%, indicando que o modelo agora consegue identificar uma porção maior dos candidatos adequados. Este aumento, mantendo uma precisão útil, representa um excelente equilíbrio, garantindo que menos talentos sejam perdidos durante a triagem automatizada.
 
 Em resumo, o modelo final é um sucesso, pois está perfeitamente alinhado com a estratégia de negócio de fornecer uma ferramenta de triagem precisa e que otimiza o tempo da equipa de recrutamento.
 
@@ -76,7 +88,6 @@ Em resumo, o modelo final é um sucesso, pois está perfeitamente alinhado com a
 │   └── test\_app\_functions.py   \# Testes unitários das funções  
 ├── .gitignore                    \# Arquivo para ignorar pastas e arquivos  
 ├── build\_artifacts.py          \# Script para gerar os artefatos de performance  
-├── PIPELINE.md                   \# Pipeline do projeto  
 ├── README.md                     \# Documentação do projeto  
 └── requirements.txt              \# Bibliotecas e versões para o ambiente
 
