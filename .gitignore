@@ -12,10 +12,7 @@ Ficheiros de Dados Brutos e Processados (os mesmos se encontram no Releases)
 data/raw/
 data/processed/
 
-Artefatos de Performance Gerados
-(Estes ficheiros são gerados pelo build_artifacts.py e não devem ser versionados)
--------------------------------------------------------------------------
-artifacts/
+
 
 Modelos Treinados
 (Modelos podem ser grandes e são considerados artefactos, não código-fonte)
@@ -38,5 +35,6 @@ Metadados do Sistema Operacional
 --------------------------------
 .DS_Store
 Thumbs.db
+
 
 
